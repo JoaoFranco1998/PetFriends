@@ -15,3 +15,7 @@ PetFriends is a platform for reporting lost and found animals and connecting own
 ## Project status
 
 Initial development.
+
+## Contributing
+
+Please read the [contribution guidelines](CONTRIBUTING.md) before making changes to the project.
