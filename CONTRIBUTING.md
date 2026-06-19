@@ -18,16 +18,32 @@ GitHub Issues are not used for project planning to avoid duplicating work betwee
 
 ## Development workflow
 
-The project follows GitHub Flow.
+The project follows GitHub Flow and uses the following Jira workflow:
 
-1. Select a Jira work item.
+```text
+To Do
+  ↓
+In Progress
+  ↓
+Done
+```
+
+A work item remains `In Progress` during implementation, testing and Pull Request review.
+
+The development process is:
+
+1. Select and assign a Jira work item.
 2. Move the work item to `In Progress`.
-3. Create a branch from `main`.
-4. Implement and test the change.
-5. Open a Pull Request.
-6. Review and validate the change.
-7. Merge the Pull Request into `main`.
-8. Move the Jira work item to `Done`.
+3. Switch to `main` and pull the latest changes.
+4. Create a branch from the updated `main`.
+5. Implement and test the change.
+6. Commit and push the changes.
+7. Open a Pull Request targeting `main`.
+8. Review the changed files and validate the automated checks.
+9. Squash and merge the Pull Request into `main`.
+10. Confirm that the CI workflow passes on `main`.
+11. Move the Jira work item to `Done`.
+12. Delete the completed local branch.
 
 Direct development on `main` is not allowed.
 
@@ -165,27 +181,38 @@ Use `.env.example` to document required environment variables without including 
 
 ## Before opening a Pull Request
 
-Confirm that:
+From the repository root, confirm that:
 
 ```text
-dotnet build
-dotnet test
+dotnet tool restore
+dotnet restore
+dotnet build --configuration Release --no-restore
+dotnet test --configuration Release --no-build
 ```
 
 complete successfully.
 
-Also review the changed files to ensure that no local configuration or sensitive information is included.
+Also confirm that:
+
+* the branch was created from an updated `main`;
+* all acceptance criteria have been satisfied;
+* applicable tests have been added or updated;
+* documentation reflects any relevant changes;
+* no local configuration or sensitive information is included;
+* the Pull Request has a limited and coherent scope.
 
 ## Definition of Done
 
 A work item is considered complete when:
 
 * all acceptance criteria are satisfied;
-* the solution builds successfully;
-* applicable tests have been added;
-* all tests pass;
-* no secrets were committed;
+* the solution builds successfully in `Release`;
+* applicable tests have been added or updated;
+* all automated tests pass;
+* the GitHub Actions CI workflow passes;
+* no secrets or credentials were committed;
 * the code was reviewed through a Pull Request;
 * documentation was updated when necessary;
-* the Pull Request was merged into `main`;
+* the Pull Request was squash-merged into `main`;
+* the completed branch was removed;
 * the Jira work item was moved to `Done`.
